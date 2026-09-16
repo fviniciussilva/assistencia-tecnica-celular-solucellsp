@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soluções SP — Tecnologia, Automação e Segurança</title>
+    <meta name="description" content="Soluções SP: Manutenção de PCs, automação de tarefas, desenvolvimento web, bots personalizados e segurança da informação. Tecnologia de ponta para você e sua empresa.">
+    <meta name="keywords" content="manutenção pc, automação, desenvolvimento web, bots, segurança da informação, soluções technology, São Paulo">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-magenta: #ff00e6;
+            --neon-purple: #a855f7;
+            --dark-bg: #0a0a0f;
+            --dark-card: #12121a;
+            --dark-card-hover: #1a1a24;
+            --border-dim: rgba(255, 255, 255, 0.06);
+            --border-glow: rgba(0, 240, 255, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e2e8f0;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* ── Scanline overlay ── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 240, 255, 0.015) 2px,
+                rgba(0, 240, 255, 0.015) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ── Animated grid background ── */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridShift 20s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        /* ── Floating orbs ── */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .orb-cyan {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.12), transparent 70%);
+            top: -100px; left: -100px;
+            animation: floatOrb 15s ease-in-out infinite alternate;
+        }
+        .orb-magenta {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(255, 0, 230, 0.08), transparent 70%);
+            bottom: 10%; right: -80px;
+            animation: floatOrb 18s ease-in-out infinite alternate-reverse;
+        }
+        .orb-purple {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.10), transparent 70%);
+            top: 40%; left: 50%;
+            animation: floatOrb 22s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, -40px) scale(1.15); }
+        }
+
+        /* ── Glass card ── */
+        .glass {
+            background: rgba(18, 18, 26, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-dim);
+            border-radius: 16px;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .glass:hover {
+            border-color: var(--border-glow);
+            background: rgba(26, 26, 36, 0.8);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+
+        /* ── Neon text gradient ── */
+        .neon-gradient {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .neon-cyan-text {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .neon-magenta-text {
+            color: var(--neon-magenta);
+            text-shadow: 0 0 20px rgba(255, 0, 230, 0.3);
+        }
+
+        /* ── Button styles ── */
+        .btn-neon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            border: 1px solid var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.06);
+            color: var(--neon-cyan);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            overflow: hidden;
+        }
+        .btn-neon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .btn-neon:hover {
+            background: rgba(0, 240, 255, 0.12);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2), inset 0 0 30px rgba(0, 240, 255, 0.05);
+            transform: translateY(-2px);
+        }
+        .btn-neon:hover::before { opacity: 1; }
+
+        .btn-magenta {
+            border-color: var(--neon-magenta);
+            background: rgba(255, 0, 230, 0.06);
+            color: var(--neon-magenta);
+        }
+        .btn-magenta:hover {
+            background: rgba(255, 0, 230, 0.12);
+            box-shadow: 0 0 30px rgba(255, 0, 230, 0.2), inset 0 0 30px rgba(255, 0, 230, 0.05);
+        }
+
+        .btn-solid-cyan {
+            background: var(--neon-cyan);
+            color: #0a0a0f;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+        }
+        .btn-solid-cyan:hover {
+            background: #00d4e6;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* ── Service card icon ring ── */
+        .icon-ring {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            transition: all 0.3s;
+        }
+        .glass:hover .icon-ring {
+            background: rgba(0, 240, 255, 0.15);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+
+        /* ── Hero badge pulse ── */
+        .pulse-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 12px var(--neon-cyan);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        /* ── Section titles ── */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* ── Timeline ── */
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-magenta), var(--neon-purple));
+            opacity: 0.3;
+        }
+        .timeline-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-cyan);
+            background: var(--dark-bg);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+
+        /* ── Code block styling ── */
+        .code-snippet {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            color: #a5b4fc;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+        .code-snippet .keyword { color: var(--neon-magenta); }
+        .code-snippet .string { color: #34d399; }
+        .code-snippet .func { color: var(--neon-cyan); }
+        .code-snippet .comment { color: #64748b; }
+
+        /* ── Divider glow ── */
+        .glow-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), transparent);
+            opacity: 0.3;
+            margin: 2rem 0;
+        }
+
+        /* ── Mobile menu ── */
+        #mobile-menu {
+            background: rgba(10, 10, 15, 0.97);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-dim);
+        }
+
+        /* ── Reveal animation ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── WhatsApp floating button ── */
+        .float-wa {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 100;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25d366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(37, 211, 102, 0.35);
+            animation: floatWa 3s ease-in-out infinite;
+            transition: transform 0.3s;
+        }
+        .float-wa:hover { transform: scale(1.1); }
+        .float-wa svg { width: 30px; height: 30px; color: white; }
+        @keyframes floatWa {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* ── Responsive tweaks ── */
+        @media (max-width: 768px) {
+            .section-title { font-size: 1.85rem; }
+            .section-subtitle { font-size: 0.95rem; }
+            .hero-title { font-size: 2.4rem !important; }
+        }
+
+        /* ── Cursor glow follower (desktop only) ── */
+        @media (min-width: 769px) {
+            #cursor-glow {
+                position: fixed;
+                width: 300px;
+                height: 300px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(0, 240, 255, 0.06), transparent 70%);
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                z-index: -1;
+                transition: opacity 0.3s;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Ambient background layers ── -->
+    <div class="grid-bg"></div>
+    <div class="orb orb-cyan"></div>
+    <div class="orb orb-magenta"></div>
+    <div class="orb orb-purple"></div>
+    <div id="cursor-glow"></div>
+
+    <!-- ── Floating WhatsApp ── -->
+    <a href="https://wa.me/5511939432371?text=Olá!%20Gostaria%20de%20know%20mais%20sobre%20os%20serviços%20da%20Soluções%20SP." target="_blank" class="float-wa" aria-label="Falar pelo WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.326c-.136-.979.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07-.037 2.913-.794.843-.756 1.184-1.966.794-2.913-.136-.979-.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07.037 2.913.794.843.756 1.184 1.966.794 2.913-.136.979.037 2.07-.794 2.913-.756.843-1.966 1.184-2.913.794Z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm0 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Z"/></svg>
+    </a>
+
+    <!-- ════════════════ HEADER ════════════════ -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-[#1e293b]/50">
+        <div class="max-w-7xl mx-auto px-5 md:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00f0ff] to-[#ff00e6] flex items-center justify-center shadow-lg shadow-[#00f0ff]/20 group-hover:shadow-[#ff00e6]/20 transition-all duration-300">
+                        <svg class="w-5 h-5 text-[#0a0a0f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-white">
+                        Soluções <span class="text-[#00f0ff]">SP</span>
+                    </span>
+                </a>
+
+                <!-- Desktop nav -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+                    <a href="#servicos" class="text-slate-400 hover:text-white transition-colors duration-200">Serviços</a>
+                    <a href="#historia" class="text-slate-400 hover:text-white transition-colors duration-200">História</a>
+                    <a href="#formacao" class="text-slate-400 hover:text-white transition-colors duration-200">Formação</a>
+                    <a href="#cyber-hardware" class="text-slate-400 hover:text-white transition-colors duration-200">Cyber/Hardware</a>
+                    <a href="#pix-delivery" class="text-slate-400 hover:text-white transition-colors duration-200">Pix & Delivery</a>
+                    <a href="https://wa.me/5511939432371?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20da%20Soluções%20SP." target="_blank" class="btn-neon text-sm !py-2 !px-5 !rounded-lg">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.326c-.136-.979.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07-.037 2.913-.794.843-.756 1.184-1.966.794-2.913-.136-.979-.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07.037 2.913.794.843.756 1.184 1.966.794 2.913-.136.979.037 2.07-.794 2.913-.756.843-1.966 1.184-2.913.794Z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm0 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Z"/></svg>
+                        Falar agora
+                    </a>
+                </nav>
+
+                <!-- Mobile hamburger -->
+                <button id="mobile-menu-button" class="md:hidden text-slate-300 hover:text-white transition-colors" aria-label="Abrir menu">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu panel -->
+        <div id="mobile-menu" class="hidden md:hidden px-5 pb-5 pt-2">
+            <div class="flex flex-col gap-1">
+                <a href="#servicos" class="py-3 px-4 rounded-xl text-slate-300 hover:bg-[#1a1a24] hover:text-white transition-all">Serviços</a>
+                <a href="#historia" class="py-3 px-4 rounded-xl text-slate-300 hover:bg-[#1a1a24] hover:text-white transition-all">História</a>
+                <a href="#formacao" class="py-3 px-4 rounded-xl text-slate-300 hover:bg-[#1a1a24] hover:text-white transition-all">Formação</a>
+                <a href="#cyber-hardware" class="py-3 px-4 rounded-xl text-slate-300 hover:bg-[#1a1a24] hover:text-white transition-all">Cyber/Hardware</a>
+                <a href="#pix-delivery" class="py-3 px-4 rounded-xl text-slate-300 hover:bg-[#1a1a24] hover:text-white transition-all">Pix & Delivery</a>
+                <a href="https://wa.me/5511939432371" target="_blank" class="mt-2 btn-neon justify-center !py-3 text-sm">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.326c-.136-.979.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07-.037 2.913-.794.843-.756 1.184-1.966.794-2.913-.136-.979-.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07.037 2.913.794.843.756 1.184 1.966.794 2.913-.136.979.037 2.07-.794 2.913-.756.843-1.966 1.184-2.913.794Z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm0 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Z"/></svg>
+                    Falar pelo WhatsApp
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ════════════════ MAIN ════════════════ -->
+    <main>
+
+        <!-- ── HERO ── -->
+        <section class="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0f] via-[#0d0d16] to-[#0a0a0f] pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-5xl mx-auto px-5 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00f0ff]/5 border border-[#00f0ff]/15 text-[#00f0ff] text-xs font-semibold tracking-wider uppercase mb-8">
+                    <span class="pulse-dot"></span>
+                    Tecnologia · Automação · Segurança
+                </div>
+
+                <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.08] tracking-tight text-white mb-6">
+                    Do problema à<br>
+                    <span class="neon-gradient">solução inteligente.</span>
+                </h1>
+
+                <p class="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Manutenção de PCs, automação de tarefas, sites e dashboards, bots personalizados
+                    e segurança da informação — tudo sob medida para você e sua empresa em São Paulo.
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://wa.me/5511939432371?text=Olá!%20Gostaria%20de%20agendar%20um%20atendimento%20com%20a%20Soluções%20SP." target="_blank" class="btn-solid-cyan !py-4 !px-8 !rounded-xl text-base">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.326c-.136-.979.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07-.037 2.913-.794.843-.756 1.184-1.966.794-2.913-.136-.979-.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07.037 2.913.794.843.756 1.184 1.966.794 2.913-.136.979.037 2.07-.794 2.913-.756.843-1.966 1.184-2.913.794Z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm0 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Z"/></svg>
+                        Agendar via WhatsApp
+                    </a>
+                    <a href="#servicos" class="btn-neon !py-4 !px-8 !rounded-xl text-base">
+                        Explorar serviços
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <!-- Stats bar -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                    <div class="glass p-4 rounded-xl">
+                        <div class="text-2xl font-bold text-white mb-1">100%</div>
+                        <div class="text-xs text-slate-500">Entrega em São Paulo</div>
+                    </div>
+                    <div class="glass p-4 rounded-xl">
+                        <div class="text-2xl font-bold text-[#00f0ff] mb-1">Pix</div>
+                        <div class="text-xs text-slate-500">Pagamento instantâneo</div>
+                    </div>
+                    <div class="glass p-4 rounded-xl">
+                        <div class="text-2xl font-bold text-[#ff00e6] mb-1">24h</div>
+                        <div class="text-xs text-slate-500">Resposta rápida</div>
+                    </div>
+                    <div class="glass p-4 rounded-xl">
+                        <div class="text-2xl font-bold text-[#a855f7] mb-1">+50</div>
+                        <div class="text-xs text-slate-500">Projetos entregues</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-600">
+                <span class="text-xs tracking-widest uppercase">Scroll</span>
+                <svg class="w-4 h-4 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            </div>
+        </section>
+
+        <!-- ── SERVIÇOS (5 pilares) ── -->
+        <section id="servicos" class="py-20 md:py-28 relative">
+            <div class="max-w-7xl mx-auto px-5">
+                <div class="text-center mb-16 reveal">
+                    <span class="text-[#00f0ff] text-sm font-semibold tracking-widest uppercase">Portfolio</span>
+                    <h2 class="section-title text-white mt-3 mb-4">Os 5 pilares da Soluções SP</h2>
+                    <p class="section-subtitle mx-auto">
+                        Cada área é um compromisso com eficiência, inovação e resultados que falham na teoria, não na prática.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 1. Manutenção de PCs e Hardware -->
+                    <div class="glass p-7 md:p-8 rounded-2xl reveal" style="transition-delay: 0.05s;">
+                        <div class="flex items-start justify-between mb-5">
+                            <div class="icon-ring">
+                                <svg class="w-6 h-6 text-[#00f0ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-[#00f0ff]/10 text-[#00f0ff] border border-[#00f0ff]/15">HARDWARE</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Manutenção de PCs e Hardware</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Diagnóstico, reparo e otimização de computadores, notebooks e componentes.
+                            Limpeza interna, substituição de peças, formatação, instalação de sistemas e
+                            tudo que um PC precisa para voltar a disparar no máximo.
+                        </p>
+                        <ul class="space-y-1.5 text-sm text-slate-500">
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#00f0ff] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Limpeza e manutenção preventiva</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#00f0ff] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Troca de componentes (RAM, SSD, fonte)</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#00f0ff] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Instalação de Windows, Linux e drivers</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#00f0ff] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Overclock e otimização de desempenho</li>
+                        </ul>
+                    </div>
+
+                    <!-- 2. Automação de Tarefas e Sistemas -->
+                    <div class="glass p-7 md:p-8 rounded-2xl reveal" style="transition-delay: 0.10s;">
+                        <div class="flex items-start justify-between mb-5">
+                            <div class="icon-ring">
+                                <svg class="w-6 h-6 text-[#a855f7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-3.3 0l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.82.33 1.65 1.65 0 0 0-1.51-1H9a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 12 9.67a1.65 1.65 0 0 0 1-1.51 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 19.4 4.68a1.65 1.65 0 0 0 1.82.33H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/15">AUTOMAÇÃO</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Automação de Tarefas e Sistemas</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Identificamos processos repetitivos e transformamos em fluxos automáticos.
+                            Scripts Python, macros, integrações entre ferramentas e bots internos que
+                            liberam horas da sua rotina sem falhar.
+                        </p>
+                        <ul class="space-y-1.5 text-sm text-slate-500">
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#a855f7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Automação com Python e shell scripts</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#a855f7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Integração de APIs e webhooks</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#a855f7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Robôs de tarefas (RPA) leves</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#a855f7] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Dashboards de monitoramento</li>
+                        </ul>
+                    </div>
+
+                    <!-- 3. Desenvolvimento de Sites e Dashboards -->
+                    <div class="glass p-7 md:p-8 rounded-2xl reveal" style="transition-delay: 0.15s;">
+                        <div class="flex items-start justify-between mb-5">
+                            <div class="icon-ring">
+                                <svg class="w-6 h-6 text-[#34d399]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-[#34d399]/10 text-[#34d399] border border-[#34d399]/15">DEV</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Desenvolvimento de Sites e Dashboards</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Sites institucionais, landing pages de alta conversão, dashboards interativos
+                            e aplicações web leves. HTML, Tailwind, JavaScript, Python/Flet — entregamos
+                            código limpo, rápido e responsivo.
+                        </p>
+                        <ul class="space-y-1.5 text-sm text-slate-500">
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#34d399] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Sites estáticos e landing pages</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#34d399] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Dashboards com Flet e Python</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#34d399] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Layouts responsivos e modernos</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#34d399] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Deploy via Vercel e plataformas estáticas</li>
+                        </ul>
+                    </div>
+
+                    <!-- 4. Criação de Bots Personalizados -->
+                    <div class="glass p-7 md:p-8 rounded-2xl reveal" style="transition-delay: 0.20s;">
+                        <div class="flex items-start justify-between mb-5">
+                            <div class="icon-ring">
+                                <svg class="w-6 h-6 text-[#ff00e6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-[#ff00e6]/10 text-[#ff00e6] border border-[#ff00e6]/15">BOTS</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Criação de Bots Personalizados</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Bots para WhatsApp, automações de resposta, consulta de estoque, agendamento
+                            e fluxos inteligentes. Desenvolvidos sob medida para o seu negócio — do
+                            protótipo ao deploy em produção.
+                        </p>
+                        <ul class="space-y-1.5 text-sm text-slate-500">
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#ff00e6] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Bots WhatsApp com API oficial</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#ff00e6] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Chatbots de atendimento</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#ff00e6] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Bots de automação de vendas</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#ff00e6] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Integracao com banco de dados</li>
+                        </ul>
+                    </div>
+
+                    <!-- 5. Segurança da Informação -->
+                    <div class="glass p-7 md:p-8 rounded-2xl reveal" style="transition-delay: 0.25s;">
+                        <div class="flex items-start justify-between mb-5">
+                            <div class="icon-ring">
+                                <svg class="w-6 h-6 text-[#fbbf24]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-bold px-3 py-1 rounded-full bg-[#fbbf24]/10 text-[#fbbf24] border border-[#fbbf24]/15">SEGURANÇA</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Segurança da Informação</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Proteção de dados, análise de vulnerabilidades, hardening de sistemas e
+                            boas práticas de segurança digital. Totalmente alinhado com minha trajetória
+                            em Análise e Desenvolvimento de Sistemas com foco em SI.
+                        </p>
+                        <ul class="space-y-1.5 text-sm text-slate-500">
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#fbbf24] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Análise de vulnerabilidades básicas</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#fbbf24] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Hardening de PCs e notebooks</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#fbbf24] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Backup e recuperação de dados</li>
+                            <li class="flex items-center gap-2"><svg class="w-3.5 h-3.5 text-[#fbbf24] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg> Orientação em segurança digital</li>
+                        </ul>
+                    </div>
+
+                    <!-- Card extra:asmussen para spans md:grid-cols-3 -->
+                    <div class="sm:col-span-2 lg:col-span-3 glass p-7 md:p-8 rounded-2xl reveal bg-gradient-to-r from-[#00f0ff]/5 via-transparent to-[#ff00e6]/5 border-[#00f0ff]/10" style="transition-delay: 0.30s;">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00f0ff] to-[#ff00e6] flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#0a0a0f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Tudo integrado, tudo sob sua medida</h3>
+                                    <p class="text-sm text-slate-500">Se não está na lista, fale conosco — criamos a solução específica para o seu caso.</p>
+                                </div>
+                            </div>
+                            <a href="https://wa.me/5511939432371?text=Olá!%20Tenho%20uma%20demand%20especial%20e%20gostaria%20de%20falar%20com%20a%20Soluções%20SP." target="_blank" class="btn-neon !py-2.5 !px-5 !rounded-lg whitespace-nowrap text-sm">
+                                Solicitar orçamento
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="glow-divider max-w-7xl mx-auto"></div>
+
+        <!-- ── HISTÓRIA DE RESILIÊNCIA ── -->
+        <section id="historia" class="py-20 md:py-28 relative">
+            <div class="max-w-4xl mx-auto px-5">
+                <div class="text-center mb-14 reveal">
+                    <span class="text-[#ff00e6] text-sm font-semibold tracking-widest uppercase">A trajetória</span>
+                    <h2 class="section-title text-white mt-3 mb-4">História de resiliência</h2>
+                    <p class="section-subtitle mx-auto">
+                        Cada obstáculo virou combustível. Cada queda, uma lição. Essa é a base que constrói soluções que realmente funcionam.
+                    </p>
+                </div>
+
+                <div class="glass p-8 md:p-10 rounded-2xl reveal relative overflow-hidden">
+                    <!-- Decorative corner accent -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#ff00e6]/10 to-transparent rounded-bl-full pointer-events-none"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#00f0ff] to-[#a855f7] flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                FV
+                            </div>
+                            <div>
+                                <div class="text-white font-semibold text-lg">Fernando Vinícius da Silva</div>
+                                <div class="text-slate-500 text-sm">Fundador · Soluções SP</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-5 text-slate-300 leading-relaxed">
+                            <p class="text-lg text-white font-medium">
+                                Minha história começa longe de qualquer ambiente tecnológico perfeito — e é exatamente essa
+                                origem que me define como desenvolvedor e técnico.
+                            </p>
+
+                            <p>
+                                Cresci enfrentando desafios que a maioria dá como pronto. Aprender a programar,
+                                montar um negócio dos zero, equilibrar estudo, trabalho e família com dois filhos
+                                pequenos — tudo isso sem um caminho traçado — criou em mim uma resiliência que
+                                se traduz diretamente no resultado que entrego.
+                            </p>
+
+                            <p>
+                                Hoje, como motoboy iFood de manhã e desenvolvedor/empresário do resto do dia,
+                                eu vivo a prova de que é possível multiplexar sonhos. A mesma disciplina que me
+                                mantém no iFood 8–9 horas por dia mantém meus projetos rodando: <strong class="text-white">Andinho Cell</strong>,
+                                <strong class="text-white">Soluções SP</strong>, <strong class="text-white">Açaí Flow</strong> — cada um com sua
+                                identidade, seu cliente e sua lógica.
+                            </p>
+
+                            <p>
+                                A resiliência, para mim, não é só resistir. É <em class="text-[#00f0ff]">adaptar</em>.
+                                É pegar um problema que ninguém resolveu da forma que eu queria e escrever o código,
+                                ou abrir o PC e consertar. É buscar segurança da informação como long-term goal
+                                mesmo quando a faculdade ainda está sendo construída.
+                            </p>
+
+                            <blockquote class="border-l-2 border-[#ff00e6] pl-4 py-1 my-4 italic text-slate-400">
+                                “O que me mantém para frente não é a falta de obstáculos — é a certeza de que, no outro lado, tem uma solução esperando ser escrita.”
+                            </blockquote>
+
+                            <p class="text-slate-400">
+                                Soluções SP nasceu desse princípio. Cada serviço oferecido carrega a mesma lógica:
+                                entender a dor, entregar a solução, e fazer disso um padrão de qualidade, não
+                                uma exceção.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="glow-divider max-w-7xl mx-auto"></div>
+
+        <!-- ── FORMAÇÃO — GRADE E EVOLUÇÃO ── -->
+        <section id="formacao" class="py-20 md:py-28 relative">
+            <div class="max-w-5xl mx-auto px-5">
+                <div class="text-center mb-14 reveal">
+                    <span class="text-[#a855f7] text-sm font-semibold tracking-widest uppercase">Formação acadêmica</span>
+                    <h2 class="section-title text-white mt-3 mb-4">Análise e Desenvolvimento de Sistemas</h2>
+                    <p class="section-subtitle mx-auto">
+                        Faculdade ADS — Anhanguera Vila Mariana — e a evolução que constrói a base técnica de tudo o que faço.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 reveal">
+                    <!-- Grade atual -->
+                    <div class="glass p-7 md:p-8 rounded-2xl">
+                        <h3 class="text-xl font-bold text-white mb-2">Grade atual — 4º semestre</h3>
+                        <p class="text-sm text-slate-500 mb-6">Turno matutino das 8:20 às 10:00</p>
+
+                        <div class="relative pl-10">
+                            <div class="timeline-line"></div>
+                            <div class="space-y-6">
+                                <div class="flex gap-4 relative">
+                                    <div class="timeline-dot mt-1.5"></div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-white">Segunda — Fundamentos de Banco de Dados</span>
+                                        <span class="text-xs text-slate-500 block ml-7">Prof. responsável · SQL e modelagem</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 relative">
+                                    <div class="timeline-dot mt-1.5"></div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-white">Terça — Lógica para Computação (LOO)</span>
+                                        <span class="text-xs text-slate-500 block ml-7">Algoritmos, estruturas de dados</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 relative">
+                                    <div class="timeline-dot mt-1.5"></div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-white">Quarta — Engenharia de Software</span>
+                                        <span class="text-xs text-slate-500 block ml-7">SDLC, metodologias ágeis</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 relative">
+                                    <div class="timeline-dot mt-1.5"></div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-white">Quinta — JavaScript</span>
+                                        <span class="text-xs text-slate-500 block ml-7">Front-end, DOM, ECMAScript</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 relative">
+                                    <div class="timeline-dot mt-1.5"></div>
+                                    <div>
+                                        <span class="text-sm font-semibold text-white">Sexta — Computação em Nuvem</span>
+                                        <span class="text-xs text-slate-500 block ml-7">Cloud, servidor, deployment</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evolução -->
+                    <div class="glass p-7 md:p-8 rounded-2xl">
+                        <h3 class="text-xl font-bold text-white mb-2">Evolução técnica</h3>
+                        <p class="text-sm text-slate-500 mb-6">Do primeiro “Hello World” às soluções de produção</p>
+
+                        <div class="space-y-5">
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-[#00f0ff]">01</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Estágio inicial — Java POO NetBeans</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Módulo oo02: programação orientada a objetos, classes, herança. Base sólida em Java.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-[#a855f7]">02</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Python + Flet — primeiros apps multi-tela</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Listagem de produtos, carrinho de compras, QR Code Pix com CRC16. Interface desktop moderna.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-[#34d399]/10 border border-[#34d399]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-[#34d399]">03</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">HTML + Tailwind CSS — identidade visual</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Paleta índigo-magenta, responsividade, landing pages e portfólio web com design studioso.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-[#ff00e6]/10 border border-[#ff00e6]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-[#ff00e6]">04</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Pygame — lógica e interação</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Jogo desenvolvido do zero: colisão, estado, loop. Treino de pensamento algorítmico.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-xs font-bold text-[#fbbf24]">05</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Streamlit + bots — automação em produção</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Solutech Bot: catalogo de telas com busca flexível e link direto para WhatsApp.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#00f0ff] to-[#ff00e6] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-lg shadow-[#00f0ff]/10">
+                                    <span class="text-xs font-bold text-white">→</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Soluções SP — consolidando o portfólio</h4>
+                                    <p class="text-xs text-slate-500 mt-1">5 pilares de serviço em um site único, dark mode cinematográfico, treinamento de IA (Hermes) — e o foco em segurança da informação como horizonte.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tecnologias -->
+                <div class="mt-10 flex flex-wrap justify-center gap-3 reveal">
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Python</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Flet</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">HTML / CSS</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Tailwind</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">JavaScript</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Java (POO)</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Streamlit</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Pygame</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">SQL / Banco de Dados</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Vercel</span>
+                    <span class="px-4 py-2 rounded-full bg-[#0a0a0f] border border-[#1e293b] text-xs text-slate-400 font-medium">Expo / React Native</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="glow-divider max-w-7xl mx-auto"></div>
+
+        <!-- ── CYBER / HARDWARE — HERMES ── -->
+        <section id="cyber-hardware" class="py-20 md:py-28 relative">
+            <div class="max-w-6xl mx-auto px-5">
+                <div class="text-center mb-14 reveal">
+                    <span class="text-[#00f0ff] text-sm font-semibold tracking-widest uppercase">Frontier</span>
+                    <h2 class="section-title text-white mt-3 mb-4">Cyber / Hardware — o agente Hermes em ação</h2>
+                    <p class="section-subtitle mx-auto">
+                        Automação inteligente, orquestração de agentes e infraestrutura que conecta software, hardware e fluxo de trabalho.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 reveal">
+                    <!-- Bloco principal -->
+                    <div class="glass p-7 md:p-9 rounded-2xl border-[#00f0ff]/10 relative overflow-hidden">
+                        <div class="absolute -top-20 -right-20 w-64 h-64 bg-[#00f0ff]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00f0ff] to-[#a855f7] flex items-center justify-center shadow-lg shadow-[#00f0ff]/20">
+                                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4Z"/><path d="M16 14a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h2a2 2 0 0 1 2-2v2a2 2 0 0 1-2 2h-2"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Hermes Agent</h3>
+                                    <p class="text-xs text-slate-500">Agente autônomo de automação · Sistema Hermes</p>
+                                </div>
+                            </div>
+
+                            <p class="text-slate-300 leading-relaxed mb-6 text-sm">
+                                O <strong class="text-white">Hermes</strong> é o agente que orquestra tarefas, executa fluxos e
+                                conecta os sistemas da Soluções SP. Ele é a camada cognitiva que transforma
+                                comandos em ações reais — desde a diagnóstico de hardware até a geração de
+                                relatórios de automação.
+                            </p>
+
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-center justify-between glass !rounded-xl !p-3 !bg-[#0a0a0f]/50">
+                                    <span class="text-slate-400">Diagnóstico automatizado de PC</span>
+                                    <span class="text-[#00f0ff] text-xs font-medium">ativo</span>
+                                </div>
+                                <div class="flex items-center justify-between glass !rounded-xl !p-3 !bg-[#0a0a0f]/50">
+                                    <span class="text-slate-400">Orquestração de bots WhatsApp</span>
+                                    <span class="text-[#00f0ff] text-xs font-medium">ativo</span>
+                                </div>
+                                <div class="flex items-center justify-between glass !rounded-xl !p-3 !bg-[#0a0a0f]/50">
+                                    <span class="text-slate-400">Geração de relatórios de hardware</span>
+                                    <span class="text-[#00f0ff] text-xs font-medium">ativo</span>
+                                </div>
+                                <div class="flex items-center justify-between glass !rounded-xl !p-3 !bg-[#0a0a0f]/50">
+                                    <span class="text-slate-400">Monitoramento de health de sistemas</span>
+                                    <span class="text-[#ff00e6] text-xs font-medium">em desenvolvimento</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 code-snippet">
+                                <span class="keyword">import</span> hermes_agent <span class="keyword">as</span> h<br>
+                                <span class="comment"># Inicializa o agente de automação</span><br>
+                                agent = h.<span class="func">Agent</span>(name=<span class="string">"solucell-hermes"</span>)<br>
+                                agent.<span class="func">register_task</span>(<span class="string">"hardware_scan"</span>, <span class="func">scan_pc</span>)<br>
+                                agent.<span class="func">register_task</span>(<span class="string">"whatsapp_bot"</span>, <span class="func">run_bot</span>)<br>
+                                agent.<span class="func">run</span>() <span class="comment"># → automação em modo contínuo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hardware showcase -->
+                    <div class="glass p-7 md:p-9 rounded-2xl border-[#ff00e6]/10 reveal">
+                        <h3 class="text-lg font-bold text-white mb-5">Hardware em foco</h3>
+
+                        <div class="space-y-4">
+                            <div class="flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/20 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-[#00f0ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">PC · Notebook · Componentes</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Manutenção, diagnóstico, montagem e upgrade — hardware como extensão do sistema, não como caixa preta.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-[#a855f7]/10 border border-[#a855f7]/20 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-[#a855f7]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Automação de infraestrutura</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Scripts que monitoram, alertam e resolvem — menos toque manual, mais confiabilidade.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-[#ff00e6]/10 border border-[#ff00e6]/20 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-[#ff00e6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Integração Hermes ↔ Hardware</h4>
+                                    <p class="text-xs text-slate-500 mt-1">O agente Hermes pode disparar leituras de hardware, disparar sequências de manutenção e registrar tudo em log estruturado.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="w-10 h-10 rounded-lg bg-[#fbbf24]/10 border border-[#fbbf24]/20 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-[#fbbf24]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-semibold text-sm">Segurança no nível do hardware</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Hardening de BIOS, verificação de integridade, controle de acesso físico — segurança que começa antes do sistema operacional.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 rounded-xl bg-[#0a0a0f] border border-[#1e293b]">
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                <strong class="text-white">Workstation de desenvolvimento:</strong>
+                                HP ProBook 6460b · Intel Core i7 3ª geração · 8GB RAM · 128GB SSD ·
+                                Windows 11. O mesmo equipamento que rodar meu desenvolvimento diário, meus
+                                testes de automação e meus projetos de bots.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="glow-divider max-w-7xl mx-auto"></div>
+
+        <!-- ── PIX & DELIVERY — AÇAÍ FLOW ── -->
+        <section id="pix-delivery" class="py-20 md:py-28 relative">
+            <div class="max-w-5xl mx-auto px-5">
+                <div class="text-center mb-14 reveal">
+                    <span class="text-[#34d399] text-sm font-semibold tracking-widest uppercase">Pagamento · Entrega</span>
+                    <h2 class="section-title text-white mt-3 mb-4">Pix e delivery integrados</h2>
+                    <p class="section-subtitle mx-auto">
+                        Pagamento instantâneo via Pix e sistema de delivery operacional — modelo validado pelo sistema Açaí Flow, agora estendido a serviços de tecnologia.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 reveal">
+                    <!-- Pix -->
+                    <div class="glass p-8 rounded-2xl border-[#34d399]/10">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 rounded-xl bg-[#34d399]/10 border border-[#34d399]/20 flex items-center justify-center">
+                                <svg class="w-7 h-7 text-[#34d399]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="6" width="20" height="12" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Pagamento via Pix</h3>
+                                <p class="text-xs text-slate-500">Instantâneo · Sem taxa · Seguro</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#34d399] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Pagamento 100% via <strong class="text-white">Pix</strong> — chave copia-e-cola, QR Code ou app.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#34d399] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Pague <strong class="text-white">apenas após aprovar</strong> o serviço — tudo testado antes do fluxo de pagamento.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#34d399] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Notificação automática no WhatsApp após o pagamento ser confirmado.</span>
+                            </li>
+                        </ul>
+
+                        <div class="mt-6 p-4 rounded-xl bg-[#0a0a0f] border border-[#1e293b]">
+                            <p class="text-xs text-slate-500 mb-2">Chave Pix (exemplo):</p>
+                            <div class="code-snippet text-xs">
+                                <span class="text-[#34d399]">solucoes.sp@pix</span> <span class="text-slate-600">·</span> <span class="text-slate-500">CNPJ em conformidade</span>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-2">A chave real é fornecida no atendimento para garantir segurança da transação.</p>
+                        </div>
+                    </div>
+
+                    <!-- Delivery + Açaí Flow -->
+                    <div class="glass p-8 rounded-2xl border-[#ff00e6]/10">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 rounded-xl bg-[#ff00e6]/10 border border-[#ff00e6]/20 flex items-center justify-center">
+                                <svg class="w-7 h-7 text-[#ff00e6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Sistema de Delivery</h3>
+                                <p class="text-xs text-slate-500">Modelo validado · 24h · Terceira via</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-300 leading-relaxed mb-5">
+                            A logística de delivery que usamos nasce do sistema operacional do
+                            <strong class="text-white">Açaí Flow</strong> — negócio de açaí 24 horas com entrega via
+                            iFood, 99Food e terceira via de entrega. Do modelo de 300ml / 500ml /
+                            700ml à logística de múltiplas plataformas — a mesma disciplina de
+                            entrega a tempo, com controle de qualidade e rastreabilidade.
+                        </p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#ff00e6] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Técnico vai até você — ou retira e devolve o equipamento com segurança.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#ff00e6] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Atendimento <strong class="text-white">24 horas</strong> — mesma disponibilidade do Açaí Flow, adaptada a serviços de tecnologia.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#ff00e6] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Integração com múltiplas plataformas de delivery — iFood, 99Food e terceira via.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <svg class="w-4 h-4 text-[#ff00e6] mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l4 4L19 7"/></svg>
+                                <span class="text-slate-300">Rastreio e atualização em tempo real pelo WhatsApp.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CTA Pix + Delivery -->
+                <div class="mt-10 glass p-7 md:p-8 rounded-2xl bg-gradient-to-r from-[#34d399]/5 via-transparent to-[#ff00e6]/5 border-[#34d399]/10 reveal">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Tudo pronto para começar</h3>
+                            <p class="text-sm text-slate-400 mt-1">Descrevemos o serviço, concordamos o valor, você aprova, paga via Pix e recebe com delivery ou presencial.</p>
+                        </div>
+                        <a href="https://wa.me/5511939432371?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20sistema%20de%20Pix%20e%20delivery%20da%20Soluções%20SP." target="_blank" class="btn-magenta !py-3 !px-6 !rounded-xl whitespace-nowrap text-sm">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.326c-.136-.979.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07-.037 2.913-.794.843-.756 1.184-1.966.794-2.913-.136-.979-.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07.037 2.913.794.843.756 1.184 1.966.794 2.913-.136.979.037 2.07-.794 2.913-.756.843-1.966 1.184-2.913.794Z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm0 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Z"/></svg>
+                            Falar pelo WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="glow-divider max-w-7xl mx-auto"></div>
+
+        <!-- ── CTA FINAL ── -->
+        <section class="py-20 md:py-28 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#00f0ff]/5 via-transparent to-[#ff00e6]/5 pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00f0ff]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-3xl mx-auto px-5 text-center reveal">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight mb-6">
+                    Do problema à<br>
+                    <span class="neon-gradient">solução inteligente.</span>
+                </h2>
+                <p class="text-slate-400 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+                    Se você precisa resolver algo de PC, automatizar algo, desenvolver um site,
+                    bot ou proteger seus dados — a Soluções SP tem o lugar certo para começar.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://wa.me/5511939432371?text=Olá!%20Gostaria%20de%20agendar%20um%20atendimento%20com%20a%20Soluções%20SP." target="_blank" class="btn-solid-cyan !py-4 !px-10 !rounded-xl text-base">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.326c-.136-.979.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07-.037 2.913-.794.843-.756 1.184-1.966.794-2.913-.136-.979-.037-2.07.794-2.913.756-.843 1.966-1.184 2.913-.794.979.136 2.07.037 2.913.794.843.756 1.184 1.966.794 2.913-.136.979.037 2.07-.794 2.913-.756.843-1.966 1.184-2.913.794Z"/><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0Zm0 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Z"/></svg>
+                        Agendar atendimento
+                    </a>
+                    <a href="mailto:solucoes.sp@contato.com" class="btn-neon !py-4 !px-10 !rounded-xl text-base">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        E-mail de contato
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ════════════════ FOOTER ════════════════ -->
+    <footer class="border-t border-[#1e293b] py-12">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="grid md:grid-cols-4 gap-8 mb-10">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <a href="#" class="flex items-center gap-3 mb-4">
+                        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00f0ff] to-[#ff00e6] flex items-center justify-center">
+                            <svg class="w-5 h-5 text-[#0a0a0f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-bold text-white">Soluções <span class="text-[#00f0ff]">SP</span></span>
+                    </a>
+                    <p class="text-sm text-slate-500 max-w-sm leading-relaxed">
+                        Manutenção de PCs, automação de tarefas, sites, bots e segurança da informação.
+                        Tecnologia profissional para você e sua empresa — em São Paulo e região.
+                    </p>
+                </div>
+
+                <!-- Links rápidos -->
+                <div>
+                    <h4 class="text-white text-sm font-semibold mb-4">Serviços</h4>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li><a href="#servicos" class="hover:text-white transition-colors">Manutenção de PCs</a></li>
+                        <li><a href="#servicos" class="hover:text-white transition-colors">Automação de tarefas</a></li>
+                        <li><a href="#servicos" class="hover:text-white transition-colors">Sites e dashboards</a></li>
+                        <li><a href="#servicos" class="hover:text-white transition-colors">Bots personalizados</a></li>
+                        <li><a href="#servicos" class="hover:text-white transition-colors">Segurança da informação</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contato -->
+                <div>
+                    <h4 class="text-white text-sm font-semibold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li><a href="https://wa.me/5511939432371" target="_blank" class="hover:text-white transition-colors">WhatsApp: (11) 93943-2371</a></li>
+                        <li><a href="mailto:solucoes.sp@contato.com" class="hover:text-white transition-colors">E-mail: solucoes.sp@contato.com</a></li>
+                        <li><span class="hover:text-white transition-colors cursor-pointer">São Paulo · SP · Brasil</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-[#1e293b] pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+                <p>&copy; 2026 Soluções SP. Todos os direitos reservados.</p>
+                <div class="flex items-center gap-4">
+                    <a href="#" class="hover:text-white transition-colors" aria-label="Instagram">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition-colors" aria-label="LinkedIn">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition-colors" aria-label="GitHub">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                    </a>
+                    <span class="text-slate-700">|</span>
+                    <span>Desenvolvido por Fernando Vinícius</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ════════════════ SCRIPTS ════════════════ -->
+    <script>
+        // Inicializa ícones Lucide
+        lucide.createIcons();
+
+        // ── Mobile menu ──
+        const btnMobile = document.getElementById('mobile-menu-button');
+        const menuMobile = document.getElementById('mobile-menu');
+        btnMobile.addEventListener('click', () => {
+            menuMobile.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => menuMobile.classList.add('hidden'));
+        });
+
+        // ── Reveal on scroll (Intersection Observer) ──
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        revealEls.forEach(el => observer.observe(el));
+
+        // ── Cursor glow (desktop only) ──
+        const isTouch = window.matchMedia('(hover: none)').matches;
+        if (!isTouch) {
+            const glow = document.getElementById('cursor-glow');
+            let mouseX = -999, mouseY = -999;
+            let glowX = -999, glowY = -999;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function animateGlow() {
+                glowX += (mouseX - glowX) * 0.12;
+                glowY += (mouseY - glowY) * 0.12;
+                glow.style.left = glowX + 'px';
+                glow.style.top = glowY + 'px';
+                glow.style.opacity = '1';
+                requestAnimationFrame(animateGlow);
+            }
+            animateGlow();
+
+            // Esconde fora da janela
+            document.addEventListener('mouseleave', () => {
+                glow.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', () => {
+                glow.style.opacity = '1';
+            });
+        }
+
+        // ── Smooth scroll para anchors ──
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+
+    <!-- Configuração adicional do Tailwind para cores customizadas -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-bg': '#0a0a0f',
+                        'dark-card': '#12121a',
+                    }
+                }
+            }
+        };
+    </script>
+
+</body>
+</html>
